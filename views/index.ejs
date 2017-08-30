@@ -9,11 +9,19 @@
 </head>
 <body>
    <h1>안녕! 잘 보이지</h1>
+   
+   <form action="/" method="post"> <!--루트경로보내면처리되도록-->
+     <!--url지원 브라우저있어, 폼전송 하려면 name있어야, -->
+     <input type="url" name="longUrl" >
+     <!--전송 input button다되-->
+     <input type="submit" value="전송">
+   </form>
+
    <table>
      <thead>
        <tr>
-         <td>long url</td>
-         <td>short url</td>
+         <td>Long url</td>
+         <td>Short url</td>
        </tr>
      </thead>
      <tbody>

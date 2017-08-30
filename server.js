@@ -2,6 +2,8 @@ const express = require('express')
 const morgan = require('morgan')
 const basicAuth = require('express-basic-auth')
 const randomstring = require('randomstring')
+const bodyParser = require('body-parser')
+
 
 const data = [ //이건 메모리위에 가짜데이터 테스트용으로 이렇게 
    //{longUrl: 'http://google.com', id: '58DX37' }
@@ -13,6 +15,9 @@ const data = [ //이건 메모리위에 가짜데이터 테스트용으로 이�
 ]
 
 const app = express()
+
+//폼전송에 미들웨어 
+app.use(bodyParser.urlencoded({ extended: false }))
 
 //https://www.npmjs.com/package/express-basic-auth 첼린지 부분 위에 const
 app.use(basicAuth({
@@ -45,6 +50,27 @@ app.get('/:id', (req,res) => {  // http://localhost:3000/6자리쇼트너 이동
   }
 
 })
+
+//form 전송받고나면 리다이렉트 시켜야한다. 
+//인풋박스에 http://naver.com 넣으면 짧은url생성 
+app.post('/', (req, res) => {
+  //body에 롱url이
+  const longUrl = req.body.longUrl
+  //id가 바껴야 하니까 컨스트 보다 렛
+  let id;
+  while(true){  //안겹칠때까지 계속 반복 while 와일문
+    const candidate = randomstring.generate(6) //제너레이트함수써서 맏는거 불러와
+    const matched = data.find(item => item.id === candidate) // find
+    //다른함수에 썼지만 , 함수안이니까 괜찮아. 여기선 matced있으면 나쁜것 -돌아가기
+    if(!matched){ //잘된것
+    id = candidate
+    break
+    }
+  } //while밖으로 나왔다는 것은 중복이 없는 아이디를 찾았다는 뜻 
+ data.push({id,longUrl})
+ res.redirect('/')
+})
+
 
 app.listen(3000, () => { //listen해야 서버가 구동
   console.log('listening...')
