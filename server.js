@@ -1,9 +1,14 @@
 const express = require('express')
 const morgan = require('morgan')
 const basicAuth = require('express-basic-auth')
+const randomstring = require('randomstring')
 
 const data = [ //이건 메모리위에 가짜데이터 테스트용으로 이렇게 
-   {longUrl: 'http://google.com', id: '58DX37' }
+   //{longUrl: 'http://google.com', id: '58DX37' }
+   {
+     longUrl: 'http://google.com', 
+     id: randomstring.generate(6) 
+   }
 
 ]
 
@@ -28,6 +33,18 @@ app.get('/',(req,res) => {
   res.render('index.ejs', {data})
 })
 
+
+app.get('/:id', (req,res) => {  // http://localhost:3000/6자리쇼트너 이동확인 
+  const id = req.params.id
+  const matched = data.find(item => item.id === id)//판별함수 find에넘겨  id가 같은지 발견하면 리턴
+  if (matched){
+    res.redirect(301, matched.longUrl) //
+  }else {
+    res.status(404)  //싦무에서 이러면 사용자가 싫어해
+    res.send('404 Not Found')
+  }
+
+})
 
 app.listen(3000, () => { //listen해야 서버가 구동
   console.log('listening...')

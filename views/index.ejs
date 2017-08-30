@@ -20,7 +20,8 @@
         <% data.forEach(item => { %>
          <tr>
            <td><%= item.longUrl %></td>
-           <td><%= item.id %></td>
+           <td><a href="/<%= item.id %>" target="_blank" ><%= item.id %></a></td>
+           <!--copy link까지 잘 복사됨-->
          </tr>
         <% }) %>
      </tbody>
